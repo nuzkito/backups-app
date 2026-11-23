@@ -1,0 +1,42 @@
+[package]
+name = "backups"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+anyhow = "1.0.104"
+# Without `links` (hyperlinks, url, idna, icu): the application does not open URLs.
+# `x11` and `wayland` do nothing on Windows, but winit needs one of them to build the tests on Linux.
+eframe = { version = "0.37.0", default-features = false, features = [
+    "accesskit",
+    "clipboard",
+    "default_fonts",
+    "system_fonts",
+    "wgpu",
+    "x11",
+    "wayland",
+] }
+jiff = { version = "1.0.2", features = ["serde"] }
+rfd = "0.18.0"
+serde = { version = "1.0.229", features = ["derive"] }
+toml = "1.2.2"
+# Without `deflate-zopfli`: zopfli is only used for compression levels above 9.
+zip = { version = "9.8.1", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+
+[build-dependencies]
+# Application icon in the Windows executable (build.rs).
+embed-resource = "3.0.12"
+
+[dev-dependencies]
+# UI screenshots (src/ui/screenshots.rs).
+egui_kittest = { version = "0.37.0", features = ["wgpu", "eframe"] }
+image = { version = "0.25", default-features = false, features = ["ico", "png"] }
+
+[profile.release]
+strip = true
+
+# Optimize dependencies in debug: software rendering and PNG encoding of the screenshots are
+# much faster. Only affects the first build of the dependencies.
+[profile.dev.package."*"]
+opt-level = 2

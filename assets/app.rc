@@ -1,0 +1,3 @@
+// Windows resources of the executable, compiled by build.rs. The icon shows in Explorer, in the
+// shortcuts and in "Apps & features". Generate it with `make icon`.
+1 ICON "icon.ico"
